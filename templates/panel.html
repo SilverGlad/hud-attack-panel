@@ -1,11 +1,14 @@
-<!-- Melhorado: HUD de Ataque com animações, fechamento por X e suporte a movimentação -->
+<!-- Melhorado: HUD de Ataque com animações, fechamento por X, suporte a movimentação e dano automático -->
 <div id="action-hud" class="hidden">
-  <div class="hud-box">
+  <div class="hud-box" id="hud-move">
     <div class="hud-header">
       <h2 id="hud-item-name"></h2>
       <span id="hud-close" class="hud-close">&times;</span>
     </div>
     <div id="hud-buttons"></div>
+    <label style="font-size: 0.9em; display: block; margin-top: 10px;">
+      <input type="checkbox" id="auto-damage-toggle" /> Rolar dano automaticamente
+    </label>
   </div>
 </div>
 
@@ -33,7 +36,7 @@
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
   animation: slide-up 0.4s ease-out;
   position: relative;
-  cursor: move;
+  cursor: grab;
 }
 
 .hud-header {
@@ -97,10 +100,11 @@ let offset = { x: 0, y: 0 };
 let isDragging = false;
 
 document.addEventListener('DOMContentLoaded', () => {
-  hudBox = document.querySelector('.hud-box');
+  hudBox = document.querySelector('#hud-move');
   if (!hudBox) return;
 
   hudBox.addEventListener('mousedown', (e) => {
+    if (e.target.id === 'hud-close' || e.target.tagName === 'BUTTON' || e.target.tagName === 'INPUT' || e.target.tagName === 'LABEL') return;
     isDragging = true;
     offset = {
       x: e.clientX - hudBox.getBoundingClientRect().left,
@@ -128,5 +132,24 @@ function stopMove() {
 $(document).on("click", "#hud-close", () => {
   $("#action-hud").addClass("hidden");
   $("#hud-buttons").html("");
+});
+
+// Configuração por jogador - salvar preferência de auto-dano
+Hooks.once("ready", () => {
+  game.settings.register("hud-attack-panel", "autoDamage", {
+    name: "Rolar dano automaticamente",
+    hint: "Se ativado, o dano será rolado automaticamente após o ataque.",
+    scope: "client",
+    config: true,
+    default: false,
+    type: Boolean
+  });
+
+  const auto = game.settings.get("hud-attack-panel", "autoDamage");
+  $("#auto-damage-toggle").prop("checked", auto);
+
+  $("#auto-damage-toggle").on("change", function () {
+    game.settings.set("hud-attack-panel", "autoDamage", this.checked);
+  });
 });
 </script>

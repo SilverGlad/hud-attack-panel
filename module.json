@@ -2,7 +2,7 @@
     "name": "hud-attack-panel",
     "title": "HUD de Ações de Combate",
     "description": "Move os botões de ataque/dano para o centro da tela.",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "author": "Nicolas Lima",
     "minimumCoreVersion": "10",
     "compatibleCoreVersion": "11",
