@@ -1,8 +1,132 @@
+<!-- Melhorado: HUD de Ataque com animações, fechamento por X e suporte a movimentação -->
 <div id="action-hud" class="hidden">
-    <div class="hud-box">
+  <div class="hud-box">
+    <div class="hud-header">
       <h2 id="hud-item-name"></h2>
-      <div id="hud-buttons"></div>
-      <button id="hud-close">Fechar</button>
+      <span id="hud-close" class="hud-close">&times;</span>
     </div>
+    <div id="hud-buttons"></div>
   </div>
-  
+</div>
+
+<style>
+#action-hud {
+  position: fixed;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  pointer-events: none;
+  animation: fade-in 0.3s ease-out forwards;
+}
+
+.hud-box {
+  background: linear-gradient(135deg, #1a1a1a, #2b2b2b);
+  border: 2px solid #888;
+  border-radius: 10px;
+  padding: 15px 20px;
+  color: white;
+  min-width: 200px;
+  max-width: 400px;
+  pointer-events: auto;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
+  animation: slide-up 0.4s ease-out;
+  position: relative;
+  cursor: move;
+}
+
+.hud-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+#hud-item-name {
+  font-size: 1.2em;
+  margin: 0;
+}
+
+.hud-close {
+  font-size: 1.5em;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.hud-close:hover {
+  color: red;
+}
+
+#hud-buttons button {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin: 5px 0;
+  font-size: 1em;
+  background-color: #333;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  transition: background 0.3s;
+}
+
+#hud-buttons button:hover {
+  background-color: #555;
+}
+
+.hidden {
+  display: none !important;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translate(-50%, -40%); }
+  to { opacity: 1; transform: translate(-50%, -50%); }
+}
+
+@keyframes slide-up {
+  from { transform: scale(0.9); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+</style>
+
+<script>
+// Movimentar HUD
+let hudBox = null;
+let offset = { x: 0, y: 0 };
+let isDragging = false;
+
+document.addEventListener('DOMContentLoaded', () => {
+  hudBox = document.querySelector('.hud-box');
+  if (!hudBox) return;
+
+  hudBox.addEventListener('mousedown', (e) => {
+    isDragging = true;
+    offset = {
+      x: e.clientX - hudBox.getBoundingClientRect().left,
+      y: e.clientY - hudBox.getBoundingClientRect().top
+    };
+    document.addEventListener('mousemove', moveHUD);
+    document.addEventListener('mouseup', stopMove);
+  });
+});
+
+function moveHUD(e) {
+  if (!isDragging) return;
+  hudBox.style.top = `${e.clientY - offset.y}px`;
+  hudBox.style.left = `${e.clientX - offset.x}px`;
+  hudBox.style.transform = 'translate(0, 0)';
+}
+
+function stopMove() {
+  isDragging = false;
+  document.removeEventListener('mousemove', moveHUD);
+  document.removeEventListener('mouseup', stopMove);
+}
+
+// Fechar HUD
+$(document).on("click", "#hud-close", () => {
+  $("#action-hud").addClass("hidden");
+  $("#hud-buttons").html("");
+});
+</script>
