@@ -1,0 +1,17 @@
+{
+    "name": "hud-attack-panel",
+    "title": "HUD de Ações de Combate",
+    "description": "Move os botões de ataque/dano para o centro da tela.",
+    "version": "1.0.0",
+    "author": "Nicolas",
+    "minimumCoreVersion": "10",
+    "compatibleCoreVersion": "11",
+    "scripts": ["scripts/main.js"],
+    "styles": ["styles/style.css"],
+    "template": "templates/panel.html",
+    "system": ["dnd5e"],
+    "manifest": "https://raw.githubusercontent.com/SilverGlad/hud-attack-panel/main/module.json",
+    "download": "https://github.com/SilverGlad/hud-attack-panel/archive/refs/heads/main.zip"
+
+  }
+  

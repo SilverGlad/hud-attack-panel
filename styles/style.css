@@ -1,0 +1,21 @@
+#action-hud {
+    position: fixed;
+    top: 30%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+    background: rgba(20, 20, 20, 0.9);
+    padding: 20px;
+    border-radius: 10px;
+    color: white;
+    text-align: center;
+  }
+  
+  .hud-box button {
+    margin: 5px;
+  }
+  
+  .hidden {
+    display: none;
+  }
+  
